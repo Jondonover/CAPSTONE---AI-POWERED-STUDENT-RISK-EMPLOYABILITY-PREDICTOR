@@ -1,3 +1,12 @@
+<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/e2269caf-5135-4231-b624-44044b09a7a1" />
+
+
+
+
+
+
+
+
 # AI-Powered Student Risk & Employability Predictor
 
 > **Predictive Analytics · Supervised Machine Learning · Multiclass Classification**  
@@ -76,15 +85,15 @@ Institutions lack systematic, data-driven tools to flag struggling students earl
 
 ```
 ├── data/
-│   ├── data.csv                          # Raw dropout dataset (semicolon-delimited)
-│   ├── Academic Risk Prediction DW.csv   # Raw academic risk dataset
-│   ├── UECD_1200_dataset.csv             # Raw employability dataset
-│   ├── Resume text.csv.gz                # Raw resume dataset (gzip + BOM encoded)
-│   ├── df_dropout_cleaned.csv            # Cleaned (output of Notebook 1)
+│   ├── data.csv                          
+│   ├── Academic Risk Prediction DW.csv 
+│   ├── UECD_1200_dataset.csv             
+│   ├── Resume text.csv.gz                
+│   ├── df_dropout_cleaned.csv            
 │   ├── df_academic_cleaned.csv
 │   ├── df_employ_cleaned.csv
 │   ├── df_resume_cleaned.csv
-│   ├── df_dropout_preprocessed.csv       # SMOTE-balanced + scaled (output of Notebook 2)
+│   ├── df_dropout_preprocessed.csv       
 │   ├── df_academic_preprocessed.csv
 │   ├── df_employ_preprocessed.csv
 │   └── df_resume_preprocessed.csv
@@ -96,12 +105,12 @@ Institutions lack systematic, data-driven tools to flag struggling students earl
 │   ├── employ_best_model.pkl
 │   ├── employ_tuned_model.pkl
 │   └── resume_best_model.pkl
-├── outputs/                              # All saved charts and figures
+├── outputs/                              
 ├── notebooks/
 │   ├── Student_Risk_Employability_Analysis-Intro_and_Cleaning.ipynb
 │   ├── Student_Risk_Employability_Analysis-EDA.ipynb
 │   └── Student_Risk_Employability_Analysis-Modelling.ipynb
-├── app/                                  # Streamlit application
+├── app/                                  
 ├── requirements.txt
 └── README.md
 ```
