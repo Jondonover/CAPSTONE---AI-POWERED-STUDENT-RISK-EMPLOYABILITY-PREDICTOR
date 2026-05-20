@@ -3,17 +3,17 @@ AI-Powered Student Risk & Employability Predictor
 Streamlit Interface — Group 2
 Run with: streamlit run app.py
 """
- 
+
 import os
 import streamlit as st
 import numpy as np
 import pandas as pd
 import joblib
 
-# Path File
+# ── Fix working directory ─────────────────────────────────────────────────────
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 os.chdir(BASE_DIR)
- 
+
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="Student Risk & Employability Predictor",
@@ -21,81 +21,57 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
- 
+
 # ── Custom CSS ─────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono&display=swap');
- 
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap');
     html, body, [class*="css"] { font-family: 'DM Sans', sans-serif; }
- 
     .main .block-container { background-color: #f7f8fc; }
- 
     .hero {
         background: linear-gradient(135deg, #1a1f36 0%, #2d3561 100%);
-        border-radius: 16px;
-        padding: 2.5rem 2rem;
-        margin-bottom: 2rem;
-        color: white;
+        border-radius: 16px; padding: 2.5rem 2rem;
+        margin-bottom: 2rem; color: white;
     }
     .hero h1 { font-size: 2rem; font-weight: 600; margin: 0 0 0.5rem; }
     .hero p  { font-size: 1rem; opacity: 0.75; margin: 0; }
- 
-    .pred-card {
-        border-radius: 12px;
-        padding: 1.5rem;
-        text-align: center;
-        margin-top: 1rem;
-    }
+    .pred-card { border-radius: 12px; padding: 1.5rem; text-align: center; margin-top: 1rem; }
     .pred-card h2 { font-size: 1.1rem; font-weight: 500; margin: 0 0 0.5rem; opacity: 0.7; }
     .pred-card h1 { font-size: 2rem; font-weight: 600; margin: 0; }
- 
     .card-green  { background: #e8f8f0; color: #1a6b42; border: 1.5px solid #a8e6c5; }
     .card-red    { background: #fdecea; color: #7b1d1d; border: 1.5px solid #f5aca6; }
     .card-orange { background: #fff4e5; color: #7a3d00; border: 1.5px solid #ffcc80; }
     .card-blue   { background: #e8f0fe; color: #1a3a6b; border: 1.5px solid #a8c4f5; }
- 
     .metric-box {
-        background: white;
-        border-radius: 10px;
-        padding: 1rem;
-        text-align: center;
-        border: 1px solid #e8eaf0;
+        background: white; border-radius: 10px;
+        padding: 1rem; text-align: center; border: 1px solid #e8eaf0;
     }
     .metric-box .val { font-size: 1.6rem; font-weight: 600; color: #2d3561; }
     .metric-box .lbl { font-size: 0.78rem; color: #888; margin-top: 2px; }
- 
     .section-title {
-        font-size: 1.15rem; font-weight: 600;
-        color: #1a1f36; margin: 1.5rem 0 1rem;
-        padding-bottom: 0.4rem;
+        font-size: 1.15rem; font-weight: 600; color: #1a1f36;
+        margin: 1.5rem 0 1rem; padding-bottom: 0.4rem;
         border-bottom: 2px solid #e8eaf0;
     }
     .stButton > button {
         background: linear-gradient(135deg, #2d3561, #4a5db5);
         color: white; border: none; border-radius: 8px;
-        padding: 0.6rem 2rem; font-size: 1rem;
-        font-family: 'DM Sans', sans-serif;
-        width: 100%; cursor: pointer;
-        transition: opacity 0.2s;
+        padding: 0.6rem 2rem; font-size: 1rem; width: 100%;
     }
     .stButton > button:hover { opacity: 0.88; }
- 
     .info-box {
         background: #e8f0fe; border-radius: 10px;
         padding: 1rem 1.25rem; font-size: 0.88rem;
-        color: #1a3a6b; margin-top: 1rem;
-        border-left: 4px solid #4a5db5;
+        color: #1a3a6b; margin-top: 1rem; border-left: 4px solid #4a5db5;
     }
     .warn-box {
         background: #fff4e5; border-radius: 10px;
         padding: 1rem 1.25rem; font-size: 0.88rem;
-        color: #7a3d00; margin-top: 1rem;
-        border-left: 4px solid #ff9800;
+        color: #7a3d00; margin-top: 1rem; border-left: 4px solid #ff9800;
     }
 </style>
 """, unsafe_allow_html=True)
- 
+
 # ── Load models ────────────────────────────────────────────────────────────────
 @st.cache_resource
 def load_models():
@@ -111,29 +87,27 @@ def load_models():
             loaded[key] = joblib.load(path)
         else:
             loaded[key] = None
-            st.warning(f"Model not found: {path}")
     return loaded
- 
+
 models = load_models()
- 
+
 def model_ready(key):
     return models.get(key) is not None
- 
+
 # ── Hero ───────────────────────────────────────────────────────────────────────
 st.markdown("""
 <div class="hero">
-    <h1> Student Risk & Employability Predictor</h1>
+    <h1>🎓 Student Risk & Employability Predictor</h1>
     <p>AI-powered early warning system for academic advisors and career counselors.</p>
 </div>
 """, unsafe_allow_html=True)
- 
+
 # ── Sidebar ────────────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.markdown("###  Navigation")
+    st.markdown("### Navigation")
     page = st.radio(
         "",
-        [" Home", " Dropout Risk", " Academic Risk",
-         " Employability", " Resume Classifier"],
+        ["Home", "Dropout Risk", "Academic Risk", "Employability", "Resume Classifier"],
         label_visibility="collapsed"
     )
     st.divider()
@@ -146,11 +120,11 @@ with st.sidebar:
         st.markdown(f"{icon} {label}")
     st.divider()
     st.caption("Group 2 · Capstone Project")
- 
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # HOME
 # ═══════════════════════════════════════════════════════════════════════════════
-if page == " Home":
+if page == "Home":
     col1, col2, col3, col4 = st.columns(4)
     for col, label, val in zip(
         [col1, col2, col3, col4],
@@ -163,53 +137,51 @@ if page == " Home":
                 <div class="val">{val}</div>
                 <div class="lbl">{label}</div>
             </div>""", unsafe_allow_html=True)
- 
+
     st.markdown('<p class="section-title">How to use this tool</p>', unsafe_allow_html=True)
     col_a, col_b = st.columns(2)
     with col_a:
         st.markdown("""
-        ** Dropout Risk**
+        **Dropout Risk**
         Enter a student's enrolment demographics and first-semester performance.
         The model predicts whether the student will Graduate, remain Enrolled, or Drop out.
- 
-        ** Academic Risk**
+
+        **Academic Risk**
         Enter GPA, attendance, and study habits.
         The model classifies the student as At Risk, Average, or High Performance.
         """)
     with col_b:
         st.markdown("""
-        ** Employability**
-        Enter skill scores across technical, soft-skill, and experiential dimensions.
+        **Employability**
+        Enter standardised skill scores across technical, soft-skill, and career dimensions.
         The model rates the student's employment readiness as Low, Medium, or High.
- 
-        ** Resume Classifier**
-        Paste resume text and the NLP model predicts the most suitable job category
-        from 25 industry sectors.
+
+        **Resume Classifier**
+        Adjust the LDA topic scores and the NLP model predicts the most suitable
+        job category from 25 industry sectors.
         """)
- 
     st.markdown('<div class="info-box"> <strong>Tip:</strong> Use the sidebar to navigate between the four prediction modules.</div>', unsafe_allow_html=True)
- 
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # DROPOUT RISK
 # ═══════════════════════════════════════════════════════════════════════════════
-elif page == " Dropout Risk":
+elif page == "Dropout Risk":
     st.markdown('<p class="section-title"> Dropout Risk Predictor</p>', unsafe_allow_html=True)
     st.caption("Features: age at enrolment, admission grade, units approved, scholarship status, debtor status")
- 
+
     col1, col2 = st.columns(2)
     with col1:
         age             = st.slider("Age at enrolment", 17, 60, 20)
-        admission_grade = st.slider("Admission grade (0–200)", 0.0, 200.0, 120.0, step=0.5)
+        admission_grade = st.slider("Admission grade (0-200)", 0.0, 200.0, 120.0, step=0.5)
         total_units     = st.slider("Total units approved (Sem 1 + Sem 2)", 0, 30, 10)
     with col2:
         scholarship     = st.selectbox("Scholarship holder?", ["No (0)", "Yes (1)"])
         debtor          = st.selectbox("Has outstanding debt?", ["No (0)", "Yes (1)"])
         scholarship_val = 1 if "Yes" in scholarship else 0
         debtor_val      = 1 if "Yes" in debtor      else 0
- 
-    if st.button("Predict Dropout Risk", key="dropout_btn"):
-        features = np.array([[age, admission_grade, total_units,
-                               scholarship_val, debtor_val]])
+
+    if st.button("Predict Dropout Risk"):
+        features = np.array([[age, admission_grade, total_units, scholarship_val, debtor_val]])
         if model_ready("dropout"):
             model  = models["dropout"]
             pred   = model.predict(features)[0]
@@ -217,120 +189,136 @@ elif page == " Dropout Risk":
             result = labels.get(int(pred), str(pred))
             card   = {"Graduate": "card-green", "Dropout": "card-red",
                       "Enrolled": "card-orange"}.get(result, "card-blue")
- 
             st.markdown(f"""
             <div class="pred-card {card}">
                 <h2>Predicted outcome</h2>
                 <h1>{result}</h1>
             </div>""", unsafe_allow_html=True)
- 
             if hasattr(model, "predict_proba"):
                 probs = model.predict_proba(features)[0]
                 st.markdown("**Prediction confidence**")
                 for lbl, prob in zip(["Dropout", "Enrolled", "Graduate"], probs):
                     st.progress(float(prob), text=f"{lbl}: {prob*100:.1f}%")
- 
             if result == "Dropout":
                 st.markdown('<div class="warn-box"> <strong>High dropout risk detected.</strong> Consider referring this student to an academic advisor immediately.</div>', unsafe_allow_html=True)
             elif result == "Graduate":
                 st.markdown('<div class="info-box"> <strong>Low dropout risk.</strong> Student is on track toward graduation.</div>', unsafe_allow_html=True)
         else:
             st.error("Dropout model not found in models/ folder.")
- 
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # ACADEMIC RISK
 # ═══════════════════════════════════════════════════════════════════════════════
-elif page == " Academic Risk":
+elif page == "Academic Risk":
     st.markdown('<p class="section-title"> Academic Risk Predictor</p>', unsafe_allow_html=True)
     st.caption("Features: GPA, absences, hours studied, engagement score, study efficiency")
- 
+
     col1, col2 = st.columns(2)
     with col1:
-        gpa           = st.slider("GPA (0.0 – 4.0)", 0.0, 4.0, 2.5, step=0.01)
+        gpa           = st.slider("GPA (0.0 - 4.0)", 0.0, 4.0, 2.5, step=0.01)
         absences      = st.slider("Number of absences", 0, 100, 10)
         hours_studied = st.slider("Weekly hours studied", 0, 60, 15)
     with col2:
-        engagement = st.slider("Engagement score (0–100)", 0, 100, 60,
+        engagement = st.slider("Engagement score (0-100)", 0, 100, 60,
                                help="Composite of raised hands, resource visits, discussion activity")
-        efficiency = st.slider("Study efficiency score (0–100)", 0, 100, 55,
+        efficiency = st.slider("Study efficiency score (0-100)", 0, 100, 55,
                                help="Ratio of grades achieved to study hours invested")
- 
-    if st.button("Predict Academic Risk", key="academic_btn"):
+
+    if st.button("Predict Academic Risk"):
         features = np.array([[gpa, absences, hours_studied, engagement, efficiency]])
         if model_ready("academic"):
             model  = models["academic"]
             pred   = model.predict(features)[0]
-            labels = {0: " At Risk", 1: " Average", 2: " High Performance"}
+            labels = {0: "At Risk", 1: "Average", 2: "High Performance"}
             result = labels.get(int(pred), str(pred))
             card   = {0: "card-red", 1: "card-orange", 2: "card-green"}.get(int(pred), "card-blue")
- 
             st.markdown(f"""
             <div class="pred-card {card}">
                 <h2>Academic classification</h2>
                 <h1>{result}</h1>
             </div>""", unsafe_allow_html=True)
- 
             if hasattr(model, "predict_proba"):
                 probs = model.predict_proba(features)[0]
                 st.markdown("**Prediction confidence**")
                 for lbl, prob in zip(["At Risk", "Average", "High Performance"], probs):
                     st.progress(float(prob), text=f"{lbl}: {prob*100:.1f}%")
- 
             if int(pred) == 0:
                 st.markdown('<div class="warn-box"> <strong>Student flagged as At Risk.</strong> High absence count and low engagement are primary risk drivers. Recommend tutoring and attendance monitoring.</div>', unsafe_allow_html=True)
+            elif int(pred) == 2:
+                st.markdown('<div class="info-box"> <strong>High Performance.</strong> Student is performing well above average.</div>', unsafe_allow_html=True)
         else:
             st.error("Academic model not found in models/ folder.")
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # EMPLOYABILITY
 # ═══════════════════════════════════════════════════════════════════════════════
-elif page == " Employability":
+elif page == "Employability":
     st.markdown('<p class="section-title"> Employability Readiness Predictor</p>', unsafe_allow_html=True)
-    st.caption("Features: GPA, technical score average, soft skills average, career readiness average")
+    st.caption("Scores are standardised (z-score). 0 = average, positive = above average, negative = below average.")
+
+    st.markdown("**How to read the sliders:**")
+    st.markdown("""
+    | Value | Meaning |
+    |---|---|
+    | -2.0 to -1.0 | Well below average |
+    | -1.0 to 0.0  | Below average |
+    | 0.0          | Exactly average |
+    | 0.0 to 1.0   | Above average |
+    | 1.0 to 2.0   | Well above average |
+    """)
+    st.divider()
 
     col1, col2 = st.columns(2)
     with col1:
-        gpa           = st.slider("GPA (0.0 – 4.0)", 0.0, 4.0, 2.5, step=0.01)
-        tech_score    = st.slider("Technical score average (0–10)",  0.0, 10.0, 5.0, step=0.1,
-                                  help="Average of programming, domain knowledge, tool proficiency")
+        gpa            = st.slider("GPA (standardised)", -2.0, 2.0, 0.0, step=0.01,
+                                   help="0 = average GPA, +1 = one std above average")
+        tech_score_avg = st.slider("Technical score average (standardised)", -3.0, 3.0, 0.0, step=0.01,
+                                   help="Avg of programming, domain knowledge, tool proficiency")
     with col2:
-        soft_score    = st.slider("Soft skills average (0–10)", 0.0, 10.0, 5.0, step=0.1,
-                                  help="Average of communication, teamwork, leadership, adaptability")
-        career_score  = st.slider("Career readiness average (0–10)", 0.0, 10.0, 5.0, step=0.1,
-                                  help="Average of internships, projects, certifications, market awareness")
+        soft_score_avg   = st.slider("Soft skills average (standardised)", -3.0, 3.0, 0.0, step=0.01,
+                                     help="Avg of communication, teamwork, leadership, adaptability")
+        career_score_avg = st.slider("Career readiness average (standardised)", -3.0, 3.0, 0.0, step=0.01,
+                                     help="Avg of internships, projects, certifications, market awareness")
 
-    if st.button("Predict Employability", key="employ_btn"):
-        features = np.array([[gpa, tech_score, soft_score, career_score]])
+    col_a, col_b, col_c, col_d = st.columns(4)
+    col_a.metric("GPA",         f"{gpa:.2f}")
+    col_b.metric("Technical",   f"{tech_score_avg:.2f}")
+    col_c.metric("Soft Skills", f"{soft_score_avg:.2f}")
+    col_d.metric("Career",      f"{career_score_avg:.2f}")
+
+    if st.button("Predict Employability"):
+        features = np.array([[gpa, tech_score_avg, soft_score_avg, career_score_avg]])
         if model_ready("employ"):
             model  = models["employ"]
             pred   = model.predict(features)[0]
-            labels = {0: " Low Readiness", 1: " Medium Readiness", 2: " High Readiness"}
+            # 0=High (~65 score), 1=Low (~30 score), 2=Medium (~48 score)
+            labels = {0: "High Readiness", 1: "Low Readiness", 2: "Medium Readiness"}
             result = labels.get(int(pred), str(pred))
-            card   = {0: "card-red", 1: "card-orange", 2: "card-green"}.get(int(pred), "card-blue")
-
+            card   = {0: "card-green", 1: "card-red", 2: "card-orange"}.get(int(pred), "card-blue")
+            
             st.markdown(f"""
             <div class="pred-card {card}">
                 <h2>Employability classification</h2>
                 <h1>{result}</h1>
             </div>""", unsafe_allow_html=True)
-
             if hasattr(model, "predict_proba"):
                 probs = model.predict_proba(features)[0]
                 st.markdown("**Prediction confidence**")
                 for lbl, prob in zip(["Low", "Medium", "High"], probs):
                     st.progress(float(prob), text=f"{lbl} Readiness: {prob*100:.1f}%")
-
-            if int(pred) == 0:
-                st.markdown('<div class="warn-box"> <strong>Low employability readiness.</strong> Recommend technical workshops and internship placement before graduation.</div>', unsafe_allow_html=True)
+            if int(pred) == 1:
+                st.markdown('<div class="warn-box"> <strong>Low employability readiness.</strong> Scores are below average. Recommend technical workshops and internship placement before graduation.</div>', unsafe_allow_html=True)
             elif int(pred) == 2:
-                st.markdown('<div class="info-box"> <strong>High employability readiness.</strong> Student is ready for job placement or graduate programme applications.</div>', unsafe_allow_html=True)
+                st.markdown('<div class="info-box"> <strong>Medium employability readiness.</strong> Student shows average readiness. Targeted skill development in weaker areas recommended.</div>', unsafe_allow_html=True)
+            elif int(pred) == 0:
+                st.markdown('<div class="info-box"> <strong>High employability readiness.</strong> Student is well above average and ready for job placement or graduate programme applications.</div>', unsafe_allow_html=True)
         else:
             st.error("Employability model not found in models/ folder.")
- 
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # RESUME CLASSIFIER
 # ═══════════════════════════════════════════════════════════════════════════════
-elif page == " Resume Classifier":
+elif page == "Resume Classifier":
     st.markdown('<p class="section-title"> Resume Job Category Classifier</p>', unsafe_allow_html=True)
     st.caption("Adjust the topic scores below to classify the resume job category.")
 
@@ -354,7 +342,6 @@ elif page == " Resume Classifier":
         20: 'Cloud Engineer'
     }
 
-    topic_values = []
     topic_labels = [
         "Technical Programming",
         "Business & Management",
@@ -370,33 +357,31 @@ elif page == " Resume Classifier":
 
     st.markdown("**Topic Scores** — slide to reflect the strength of each theme in the resume")
 
-    col1, col2 = st.columns([3, 1])
+    topic_values = []
     for i, label in enumerate(topic_labels):
+        col1, col2 = st.columns([3, 1])
         with col1:
             val = st.slider(f"Topic {i} — {label}", -1.0, 1.0, 0.0,
                             step=0.01, key=f"topic_{i}")
         with col2:
-            st.metric(label=f"Topic {i} value", value=f"{val:.2f}")
+            st.metric(label=f"Topic {i}", value=f"{val:.2f}")
         topic_values.append(val)
 
     st.divider()
     has_exp     = st.selectbox("Has work experience?", ["No (0)", "Yes (1)"])
     has_exp_val = 1 if "Yes" in has_exp else 0
 
-    if st.button("Classify Resume", key="resume_btn"):
+    if st.button("Classify Resume"):
         features = np.array([topic_values + [has_exp_val]])
-
         if model_ready("resume"):
             model      = models["resume"]
             pred_code  = int(model.predict(features)[0])
             pred_label = LABEL_MAP.get(pred_code, f"Category {pred_code}")
-
             st.markdown(f"""
             <div class="pred-card card-blue">
                 <h2>Predicted job category</h2>
                 <h1>{pred_label}</h1>
             </div>""", unsafe_allow_html=True)
-
             if hasattr(model, "predict_proba"):
                 probs    = model.predict_proba(features)[0]
                 top5_idx = np.argsort(probs)[::-1][:5]
@@ -406,7 +391,6 @@ elif page == " Resume Classifier":
                     label = LABEL_MAP.get(code, f"Category {code}")
                     st.progress(float(probs[idx]),
                                 text=f"{label}: {probs[idx]*100:.1f}%")
-
             st.markdown('<div class="info-box"> Topic scores represent the strength of each theme in the resume. A score closer to 1.0 means strong presence of that topic; closer to -1.0 means weak or absent.</div>', unsafe_allow_html=True)
         else:
             st.error("Resume model not found in models/ folder.")
