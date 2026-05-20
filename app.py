@@ -9,9 +9,9 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import joblib
- 
-# ── Fix working directory ─────────────────────────────────────────────────────
-BASE_DIR = r"c:\Users\jnyak\DS-FT15\Phase5\CAPSTONE---AI-POWERED-STUDENT-RISK-EMPLOYABILITY-PREDICTOR\Notebooks"
+
+# Path File
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 os.chdir(BASE_DIR)
  
 # ── Page config ───────────────────────────────────────────────────────────────
